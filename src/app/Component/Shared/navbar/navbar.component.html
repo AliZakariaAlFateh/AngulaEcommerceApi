@@ -1,0 +1,516 @@
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light" style="padding-left: 0px !important;">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#">Navbar scroll</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarScroll" aria-controls="navbarScroll" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarScroll">
+        <ul class="navbar-nav me-auto my-2 my-lg-0 navbar-nav-scroll" style="--bs-scroll-height: 100px;">
+          <li class="nav-item">
+            <!-- <a class="nav-link " aria-current="page" [routerLink]="['/home/login']">Login</a> -->
+          </li>
+          <li class="nav-item">
+            <a class="nav-link " aria-current="page" [routerLink]="['/']" [routerLinkActive]="'bg-primary rounded'" [routerLinkActiveOptions]="{exact:true}">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" [routerLink]="['/home/products']" [routerLinkActive]="'bg-primary rounded'">Product</a>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarScrollingDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Link
+            </a>
+            <!-- <ul class="dropdown-menu" aria-labelledby="navbarScrollingDropdown">
+              <li><a class="dropdown-item" href="#">Action</a></li>
+              <li><a class="dropdown-item" href="#">Another action</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item" href="#">Something else here</a></li>
+            </ul> -->
+          </li>
+          <li class="nav-item">
+            <a class="nav-link " [routerLink]="['/home/contact']" [routerLinkActive]="'bg-primary rounded'" tabindex="-1" aria-disabled="true">contact</a>
+          </li>
+        </ul>
+        <!-- <form class="d-flex">
+          <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+          <button class="btn btn-outline-success" type="submit">Search</button>
+        </form> -->
+
+        <i class="fa-solid fa-cart-shopping AddCart">
+          <span id="ProductsCounter">00</span>
+        </i>
+
+        <ng-container *ngIf="CheckifTokenExists">
+          <div class="dropdown">
+            <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle text-bg-success rounded-2" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
+              Logined Now
+            </a>
+            <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1">
+              <li><a class="dropdown-item" href="#" *ngIf="UserName">{{UserName}}</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item" (click)="LogOut()">Sign out</a></li>
+              <li *ngIf="IsAdminNow" ><a class="dropdown-item" #OpenForAdd_User_Or_Admin_ByAdmin>Add User</a></li>
+              <li *ngIf="IsAdminNow" ><a class="dropdown-item" #OpenForAdd_Role_ByAdmin>Add Role</a></li>
+            </ul>
+          </div>
+        </ng-container>
+           
+        <!-- <ng-container *ngIf="CheckifTokenExists; else NoToken">
+          <a class="btn btn-outline-success rounded-circle" (click)="LogOut()">logout</a>
+          
+        </ng-container> -->
+
+        <!-- <a *ngIf="!CheckifTokenExists" class="btn btn-outline-success rounded-circle" [routerLink]="['/home/login']">Login</a> -->
+        
+        <!-- <ng-template #NoToken>
+          
+          
+        </ng-template> -->
+
+        <!-- (click)="toggleHome()" -->
+        <button *ngIf="!CheckifTokenExists" class="btn btn-outline-success rounded-circle"  #formOpenBtn>Join Us</button>
+
+        
+       
+
+
+
+        <!-- //////////////////////////////////// -->
+
+
+        <!-- <div class="dropdown">
+          <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
+            <img src="https://github.com/mdo.png" alt="" width="25" height="25" class="rounded-circle me-2">
+            <strong>mdo</strong>
+          </a>
+          <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1">
+            <li><a class="dropdown-item" href="#">New project...</a></li>
+            <li><a class="dropdown-item" href="#">Settings</a></li>
+            <li><a class="dropdown-item" href="#">Profile</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" href="#">Sign out</a></li>
+          </ul>
+        </div> -->
+
+
+          
+        <!-- //////////////////////////////////   -->
+
+
+      </div>
+    </div>
+  </nav>
+
+
+
+
+
+
+
+
+
+  <!-- [style.display]="isHomeVisible ? 'block' : 'none'" -->
+  <!-- <div class="home" >
+
+    <div class="form_container">
+      <i class="uil uil-times form_close"></i>
+      
+      <div class="form login_form">
+        <form action="#">
+          <h2>Login</h2>
+
+          <div class="input_box">
+            <input type="email" placeholder="Enter your email" required />
+            <i class="uil uil-envelope-alt email"></i>
+          </div>
+          <div class="input_box">
+            <input type="password" placeholder="Enter your password" required />
+            <i class="uil uil-lock password"></i>
+            <i class="uil uil-eye-slash pw_hide"></i>
+          </div>
+
+          <div class="option_field">
+            <span class="checkbox">
+              <input type="checkbox" id="check" />
+              <label for="check">Remember me</label>
+            </span>
+            <a href="#" class="forgot_pw">Forgot password?</a>
+          </div>
+
+          <button class="button">Login Now</button>
+
+          <div class="login_signup">Don't have an account? <a href="#" id="signup">Signup</a></div>
+        </form>
+      </div>
+
+     
+      <div class="form signup_form">
+        <form action="#">
+          <h2>Signup</h2>
+
+          <div class="input_box">
+            <input type="email" placeholder="Enter your email" required />
+            <i class="uil uil-envelope-alt email"></i>
+          </div>
+          <div class="input_box">
+            <input type="password" placeholder="Create password" required />
+            <i class="uil uil-lock password"></i>
+            <i class="uil uil-eye-slash pw_hide"></i>
+          </div>
+          <div class="input_box">
+            <input type="password" placeholder="Confirm password" required />
+            <i class="uil uil-lock password"></i>
+            <i class="uil uil-eye-slash pw_hide"></i>
+          </div>
+
+          <button class="button">Signup Now</button>
+
+          <div class="login_signup">Already have an account? <a href="#" id="login">Login</a></div>
+        </form>
+      </div>
+    </div>
+
+
+  </div> -->
+
+
+  <section class="home">
+    <div class="form_container">
+      <i class="fa-solid fa-circle-xmark form_close"></i>
+      <!-- <i class="uil uil-times form_close"></i> -->
+      <!-- Login Form -->
+      <div class="form login_form">
+        <form [formGroup]="userlogin" (submit)="LogIn($event)">
+          <h2>Login</h2>
+  
+          <div class="input_box">
+            <input type="text" placeholder="Enter Your Email"  id="emial" 
+            class="form-control" 
+            formControlName="email"
+            [ngClass]="{
+              'is-invalid':!emailControl?.valid && emailControl?.touched,
+              'is-valid':emailControl?.valid
+            }" required>
+            <!-- <i class="uil uil-envelope-alt email"></i> -->
+            <i class="fa-solid fa-envelope"></i>
+            <div class="valid-feedback">
+              Good !
+            </div>
+            <div class="invalid-feedback" *ngIf="emailControl?.errors && emailControl?.hasError('required')">
+              Email required
+            </div>
+            <div class="invalid-feedback" *ngIf="emailControl?.errors && emailControl?.hasError('email')">
+              Email must be as 'a@gmail.com'
+            </div>
+
+          </div>
+          <div class="input_box">
+            <input type="text" placeholder="Enter Your Password"
+            class="form-control is-invalid" 
+            id="password" formControlName="password"
+           [ngClass]="{
+             'is-invalid':!passwordControl.valid && passwordControl.touched,
+             'is-valid':passwordControl.valid
+           }" required>
+            <!-- <i class="uil uil-lock password"></i> -->
+            <i class="fa-solid fa-key"></i>
+            <i class="uil uil-eye-slash pw_hide" #pwHideIcon1></i> <!-- Added #pwHideIcon1 reference -->
+            <div class="valid-feedback">
+              Good !
+             </div>
+             <div class="invalid-feedback" *ngIf="passwordControl.errors && passwordControl.hasError('required')">
+               Password is required
+             </div>
+          </div>
+          <br>
+          <div class="option_field">
+            <span class="checkbox">
+              <input type="checkbox" id="check" />
+              <label for="check">Remember me</label>
+            </span>
+            <a href="#" class="forgot_pw">Forgot password?</a>
+          </div>
+  
+          <button type="submit" class="button"[disabled]="!userlogin.valid">Login Now</button>
+          <div class="login_signup">Don't have an account? <a href="#" id="signup">Signup</a></div>
+        </form>
+      </div>
+  
+
+
+
+
+      <!-- Signup Form -->
+      <div class="form signup_form">
+        <!-- <i class="fa-solid fa-circle-xmark form_close2"></i> -->
+        
+        <form [formGroup]="userRegister" (submit)="Register()">
+          <h2>Signup</h2>
+          <div class="input_box">
+            <input 
+            type="text" placeholder="Enter Your Name"  id="fullName" 
+            class="form-control" 
+            formControlName="fullName"
+            [ngClass]="{
+              'is-invalid':!usernameControlRegister.valid && usernameControlRegister.touched,
+              'is-valid':usernameControlRegister.valid
+            }" required
+            >
+            
+            <!-- <i class="uil-user-square"></i> -->
+            <i class="fa-solid fa-file-signature"></i>
+            <div class="valid-feedback">
+              Good !
+            </div>
+            <div class="invalid-feedback" *ngIf="usernameControlRegister?.errors && usernameControlRegister?.hasError('required')">
+              Name required
+            </div>
+
+            <div class="invalid-feedback" *ngIf="usernameControlRegister?.errors && usernameControlRegister?.hasError('minlength')">
+              Email must be at least 7 letters....
+            </div>
+            <div class="invalid-feedback" *ngIf="usernameControlRegister?.errors && usernameControlRegister?.hasError('maxlength')">
+              Email must not exceed 100 letters....
+            </div>
+
+          </div>
+
+
+          <div class="input_box">
+            <input 
+            type="text" placeholder="Enter Your Email"  id="emial" 
+            class="form-control" 
+            formControlName="email"
+            [ngClass]="{
+              'is-invalid':!emailControlRegister?.valid && emailControlRegister?.touched,
+              'is-valid':emailControlRegister?.valid
+            }" required
+            >
+            <!-- <i class="uil uil-envelope-alt email"></i> -->
+            <i class="fa-solid fa-envelope"></i>
+
+            <div class="valid-feedback">
+              Good !
+            </div>
+            <div class="invalid-feedback" *ngIf="emailControlRegister?.errors && emailControlRegister?.hasError('required')">
+              Email required
+            </div>
+            <div class="invalid-feedback" *ngIf="emailControlRegister?.errors && emailControlRegister?.hasError('email')">
+              Email must be as 'a@gmail.com'
+            </div>
+
+            <div class="invalid-feedback" *ngIf="emailControlRegister?.errors && emailControlRegister?.hasError('minlength')">
+              Email must be at least 10 letters....
+            </div>
+            <div class="invalid-feedback" *ngIf="emailControlRegister?.errors && emailControlRegister?.hasError('maxlength')">
+              Email must not exceed 30 letters....
+            </div>
+
+          </div>
+
+
+          <div class="input_box">
+            <input type="text" placeholder="Enter Your Password"
+            class="form-control is-invalid" 
+            id="password" formControlName="password"
+           [ngClass]="{
+             'is-invalid':!passwordControlRegister.valid && passwordControlRegister.touched,
+             'is-valid':passwordControlRegister.valid
+           }" required>
+            <!-- <i class="uil uil-lock password"></i> -->
+            <i class="fa-solid fa-key"></i>
+            <i class="uil uil-eye-slash pw_hide" #pwHideIcon2></i> <!-- Added #pwHideIcon2 reference -->
+             
+            <div class="valid-feedback">
+              Good !
+             </div>
+             <div class="invalid-feedback" *ngIf="passwordControlRegister.errors && passwordControlRegister.hasError('required')">
+               Password is required
+             </div>   
+             <div class="invalid-feedback" *ngIf="passwordControlRegister.errors && passwordControlRegister.hasError('minlength')">
+              minmum length is 10 .........
+            </div>   
+             
+
+          </div>
+
+          <div class="input_box">
+            <input 
+            type="text" placeholder="Enter Your Phone Number"  id="phoneNumber" 
+            class="form-control" 
+            formControlName="phoneNumber"
+            [ngClass]="{
+              'is-invalid':!phoneNumberControlRegister.valid && phoneNumberControlRegister.touched,
+              'is-valid':phoneNumberControlRegister.valid
+            }" required
+            >
+            
+            <!-- <i class="uil-user-square"></i> -->
+            <i class="fa-solid fa-phone-flip"></i>
+            <div class="valid-feedback">
+              Good !
+            </div>
+            <div class="invalid-feedback" *ngIf="phoneNumberControlRegister?.errors && phoneNumberControlRegister?.hasError('required')">
+              Name required
+            </div>
+
+            <div class="invalid-feedback" *ngIf="phoneNumberControlRegister?.errors && phoneNumberControlRegister?.hasError('minlength')">
+              Email must be at least 11 letters....
+            </div>
+            <div class="invalid-feedback" *ngIf="phoneNumberControlRegister?.errors && phoneNumberControlRegister?.hasError('maxlength')">
+              Email must not exceed 11 letters....
+            </div>
+
+          </div>
+          <!-- Added #pwHideIcon3 reference -->
+          <!-- <div class="input_box">
+            <input type="password" placeholder="Confirm password" required />
+            <i class="uil uil-lock password"></i>
+            <i class="uil uil-eye-slash pw_hide" #pwHideIcon3></i> 
+          </div> -->
+           
+          <div class="input_box">
+            <i class="fa-solid fa-image-user"></i>
+            <!-- <i class="uil uil-images"></i> -->
+            <input type="file"  (change)="onFileSelectedImage($event)">
+          </div>
+          <div class="col-md-5 justify-content-center"  #imageDiv [style.display]="url? 'block' : 'none'">
+            <!-- Use ngIf to conditionally display the image -->
+            <img src="{{ url }}" alt="" srcset="" width="100px" height="100px" >
+          </div>
+          
+
+
+
+
+
+          <div *ngIf="IsAdminNow" class="input_box mt-2 mb-4" >
+            <div class="row justify-content-center" style="text-align: center;">
+              <div class="col-md-8">
+                <div class="awesome-selection">
+                  <label for="roleName">Role Name:</label>
+                  <select class="form-control"
+                  name="roleName" id="roleName" formControlName="roleName" class="form-control" style="text-align: center;"
+                  [ngClass]="{
+                    'is-invalid':!roleControl?.valid && roleControl?.touched,
+                    'is-valid':roleControl?.valid
+                  }" required
+                  >
+                    <option>Select The Role</option>
+                    <!-- 
+                    <option value="Admin">Admin</option>
+                    <option value="User">User</option> -->
+                    <option *ngFor="let role of Roles" value={{role.roleName}} >{{role.roleName}}</option>
+                  </select>
+                  <div class="valid-feedback">
+                    Good !
+                  </div>
+
+
+
+                  <div class="invalid-feedback" *ngIf="roleControl?.errors && roleControl?.hasError('required')">
+                    Role Name is required ..
+                  </div>   
+                  <div class="invalid-feedback" *ngIf="roleControl?.errors && roleControl?.hasError('invalidRole')">
+                    Please select a valid role...
+                 </div>   
+
+
+
+
+                </div>
+              </div>
+            </div>
+            <!-- <div *ngIf="userlogin.get('roleName')?.errors && (userlogin.get('roleName')?.dirty || userlogin.get('roleName')?.touched)">
+              <div class="invalid-feedback" *ngIf="userlogin.get('roleName')?.hasError('required')">
+                Role Name is required.
+              </div>
+              <div class="invalid-feedback" *ngIf="userlogin.get('roleName')?.hasError('invalidRole')">
+                Please select a valid role.
+              </div>
+              *ngIf="roleControl?.errors && roleControl?.touched"
+            </div> -->
+          </div>
+
+          <!-- <input type="text" hidden value="User" formControlName="roleName"> -->
+
+
+
+          <!-- <select>
+            <option value=0> select Role Now</option>
+            <option *ngFor="let role of Roles" value={{role.roleName}} >{{role.roleName}}</option>
+          </select> -->
+
+
+
+          <button class="button" type="submit" [disabled]="!userRegister.valid">Signup Now</button>
+          <div class="login_signup">Already have an account? <a href="#" id="login">Login</a></div>
+        </form>
+      </div>
+    </div>
+
+
+
+
+
+
+
+  </section>
+
+
+  <section class="home2">
+
+    <div class="form_container2">
+      <!-- form_close -->
+      <i class="fa-solid fa-circle-xmark form_close2"></i>
+
+      
+    <!--Add Roles-->
+
+    <!-- login_form -->
+    <div class="form Add_Roles">
+      <form [formGroup]="RoleObj" (submit)="AddRole()">
+        <h2>Add Role</h2>
+
+        <div class="input_box">
+          <i class="fa-solid fa-file-signature"></i>
+          <input type="text" placeholder="Enter Role Name" name="roleName" id="AddRoleName" 
+          class="form-control" 
+          formControlName="roleName"
+          [ngClass]="{
+            'is-invalid':!roleNameControl?.valid && roleNameControl?.touched,
+            'is-valid':roleNameControl?.valid
+          }" required/>
+
+          <div class="valid-feedback">
+          Good !
+          </div>
+          <div class="invalid-feedback" *ngIf="roleNameControl?.errors && roleNameControl?.hasError('required')">
+          Role Name required
+          </div>
+
+          <div class="invalid-feedback" *ngIf="roleNameControl?.errors && roleNameControl?.hasError('minlength')">
+          Role Name must be at least 7 letters....
+          </div>
+          <div class="invalid-feedback" *ngIf="roleNameControl?.errors && roleNameControl?.hasError('maxlength')">
+          Role Name must not exceed 100 letters....
+          </div>
+
+
+
+          
+        </div>
+         
+        <!-- RoleObj -->
+        <button class="button" type="submit" [disabled]="!RoleObj.valid">Add Role</button>
+       
+
+      </form>
+    </div>
+
+
+  </div>
+
+
+</section>
+

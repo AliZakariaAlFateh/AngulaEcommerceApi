@@ -1,0 +1,78 @@
+<h1>{{ProductId ? 'Edit product ': 'Add product'}}</h1>
+<!--
+     To run the ngModel you should make :
+     import  inside " imports array " for  FormsModule  in the file "app.module.ts"
+ -->
+
+
+<form class="row g-3"  (submit)="GetData($event)">
+    <div class="col-md-6">
+      <label for="productName" class="form-label">product Name</label>
+      <input type="text" class="form-control is-valid" id="productName" value="productName"  [(ngModel)]="Product.productName" name="productName"
+      [ngClass]="{
+        'is-valid':isNameValid,
+        'is-invalid':!isNameValid
+      }"
+      required>
+      <div class="valid-feedback">
+        Looks good!
+      </div>
+      <div class="invalid-feedback">
+        Product name must be more than 3 letters!
+      </div>
+    </div>
+    <!-- is-valid and is-invalid is two classes in bootstrap ...-->
+    <div class="col-md-6">
+      <label for="price" class="form-label">product Age</label>
+      <input type="number" class="form-control is-invalid" id="price" value="price"  [(ngModel)]="Product.price" name="price"
+      [ngClass]="{
+        'is-valid':isAgeValid,
+        'is-invalid':!isAgeValid
+      }"
+      required>
+      <div class="valid-feedback">
+        Looks good!
+      </div>
+      <div class="invalid-feedback">
+        Age Must not Exceed 200 and Not Less than 18!
+      </div>
+    </div>
+    
+    <div class="col-md-6">
+        <label for="qty" class="form-label">product School</label>
+        <input type="text" class="form-control is-invalid" id="qty" value="qty"  [(ngModel)]="Product.qty" name="qty"
+        [ngClass]="{
+          'is-valid':isSchoolValid,
+          'is-invalid':!isSchoolValid
+        }"
+        required>
+        <div class="valid-feedback">
+          Looks good!
+        </div>
+        <div class="invalid-feedback">
+          school Word Must be More Than 12 letters!
+        </div>
+      </div>
+
+      <!-- <div class="col-md-6">
+        <label for="address" class="form-label">product Address</label>
+        <input type="text" class="form-control is-invalid" id="address" value="address"  [(ngModel)]="product.address" name="address"
+        [ngClass]="{
+          'is-valid':isAddressValid,
+          'is-invalid':!isAddressValid
+        }"
+        required>
+        <div class="valid-feedback">
+          Looks good!
+        </div>
+        <div class="invalid-feedback">
+          school Word Must be More Than 12 letters!
+        </div>
+      </div> -->
+
+
+    <div class="col-12">
+      <button class="btn btn-primary" type="submit">Submit form</button>
+    </div>
+  </form>
+ 

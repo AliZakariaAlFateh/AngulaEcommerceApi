@@ -1,0 +1,114 @@
+<h1>{{ProductId ? 'Edit product ': 'Add product'}}</h1>
+<form class="row g-3" [formGroup]="ProductsForm" (submit)="GetData()">
+  <div class="col-md-5">
+    <label for="productName" class="form-label">Product Name:</label>
+    <input type="text"  id="productName" class="form-control is-invalid" formControlName="productName"
+    [class.is-invalid]="!ProductsForm.controls['productName'].valid" required>
+    <div class="valid-feedback">
+      {{ProductsForm.controls['productName'].valid | json}}
+    </div>
+    <div class="invalid-feedback">
+      {{ProductsForm.controls['productName'].errors | json}}
+    </div>
+    <!-- <div *ngIf="ProductsForm.get('productName')?.invalid && ProductsForm.get('productName')?.touched">
+      <small *ngIf="ProductsForm.get('productName')?.errors?.['required']" class="text-danger">Product Name is required</small>
+      <small *ngIf="ProductsForm.get('productName')?.errors?.['minlength']" class="text-danger">Product Name must be at least 7 characters</small>
+    </div> -->
+  </div>
+
+  <div class="col-md-5">
+    <label for="price" class="form-label">Price:</label>
+    <input type="number"  class="form-control is-invalid" id="price" formControlName="price"
+    [class.is-invalid]="!ProductsForm.controls['price'].valid" required>
+    <div class="valid-feedback">
+      {{ProductsForm.controls['price'].valid | json}}
+    </div>
+    <div class="invalid-feedback">
+      {{ProductsForm.controls['price'].errors | json}}
+    </div>
+
+    <!-- <div *ngIf="ProductsForm.get('price')?.invalid && ProductsForm.get('price')?.['touched']">
+
+      <small *ngIf="ProductsForm.get('price')?.errors?.['required']" class="text-danger">Price is required</small>
+      <small *ngIf="ProductsForm.get('price')?.errors?.['min']" class="text-danger">Price must be at least 100</small>
+      <small *ngIf="ProductsForm.get('price')?.errors?.['max']" class="text-danger">Price cannot exceed 10,000</small>
+    </div> -->
+
+  </div>
+
+  <div class="col-md-10">
+    <label for="qty" class="form-label">Quantity:</label>
+    <input type="number" class="form-control is-invalid" id="qty" formControlName="qty" 
+    [class.is-invalid]="!ProductsForm.controls['qty'].valid" required>
+    <div class="valid-feedback">
+      {{ProductsForm.controls['qty'].valid | json}}
+    </div>
+    <div class="invalid-feedback">
+      {{ProductsForm.controls['qty'].errors | json}}
+    </div>
+    <!-- <div *ngIf="ProductsForm.get('qty')?.invalid && ProductsForm.get('qty')?.touched">
+      <small *ngIf="ProductsForm.get('qty')?.errors?.['required']" class="text-danger">Quantity is required</small>
+      <small *ngIf="ProductsForm.get('qty')?.errors?.['max']" class="text-danger">Quantity cannot exceed 100</small>
+    </div> -->
+  </div>
+
+
+
+  <div class="col-md-10">
+    <label for="categoryid" class="form-label">Category:</label>
+    <select name="categoryid" id="categoryid" formControlName="categoryid" class="form-control is-invalid"
+    [class.is-invalid]="!ProductsForm.controls['categoryid'].valid" required>
+      <option value=0> select Category</option>
+      <option *ngFor="let category of categories" [value]="+category.id" >{{category.categoryName}}</option>
+    </select>
+    <!-- <input type="number" class="form-control is-invalid" id="qty" formControlName="qty" 
+    [class.is-invalid]="!ProductsForm.controls['qty'].valid" required> -->
+    <div class="valid-feedback">
+      {{ProductsForm.controls['categoryid'].valid | json}}
+    </div>
+    <div class="invalid-feedback">
+      {{ProductsForm.controls['categoryid'].errors | json}}
+    </div>
+    
+    <!-- <div *ngIf="ProductsForm.get('qty')?.invalid && ProductsForm.get('qty')?.touched">
+      <small *ngIf="ProductsForm.get('qty')?.errors?.['required']" class="text-danger">Quantity is required</small>
+      <small *ngIf="ProductsForm.get('qty')?.errors?.['max']" class="text-danger">Quantity cannot exceed 100</small>
+    </div> -->
+  </div>
+   
+
+  <!-- <div class="col-md-5">
+    <img src="{{url}}" alt="" srcset="" width="100px" height="100px">
+  </div> -->
+   
+
+  <div class="col-md-5"  #imageDiv [style.display]="ProductId ? 'block' : 'none'">
+    <!-- Use ngIf to conditionally display the image -->
+    <img src="{{ url }}" alt="" srcset="" width="100px" height="100px">
+  </div>
+
+
+
+  <!--https://localhost:7269/resources/{{productImage}}-->
+
+
+<input type="file"  (change)="onFileSelected($event)">
+
+
+
+
+   
+<!-- <app-loading-spinner [isLoading]="loading" loadingMessage="جارى الحفظ"></app-loading-spinner> -->
+
+
+
+
+
+ <!--formControlName="imagefile"-->
+  <!-- <button type="submit" [disabled]="!ProductsForm.valid">Submit</button> -->
+  <div class="col-12">
+    <button class="btn btn-primary" type="submit" [disabled]="!ProductsForm.valid">Submit form</button>
+  </div>
+</form>
+
+

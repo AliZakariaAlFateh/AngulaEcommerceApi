@@ -1,0 +1,29 @@
+.header {
+    position: sticky;
+    top: 0;
+    width: 100%;
+    background-color: #ffffff; /* adjust as needed */
+    z-index: 1000; /* ensure header stays on top of content */
+    padding: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* add shadow for better visibility */
+}
+
+/* .content {
+    margin-top: 50px; 
+    overflow-y: auto; 
+    height: calc(100vh - 50px); 
+} */
+/* adjust based on the height of the header */
+/* enable vertical scrolling */
+/* adjust based on the available height */
+
+.content {
+    margin-top: 50px; /* adjust based on the height of the header */
+    overflow-y: auto; /* enable vertical scrolling */
+    height: calc(100vh - 50px); /* adjust based on the available height */
+}
+
+.content::-webkit-scrollbar {
+    width: 0; /* hide scrollbar width */
+    height: 0; /* hide scrollbar height */
+}

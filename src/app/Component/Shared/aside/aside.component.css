@@ -1,0 +1,26 @@
+
+@media(max-width:575px){
+    .nav-link{
+        padding:10px 0px 10px 0px !important;
+        margin:10px 0px 10px 0px !important
+    }
+    .fs-4 {
+        font-size: calc(1.37rem + .3vw) !important;
+    }
+    .fs-3{
+        font-size: calc(0.67rem + .3vw) !important;
+    }
+}
+
+@media(min-width:690px){
+    .nav-link{
+        padding:10px 0px 10px 0px !important;
+        /* margin: top right bottom left    */
+        margin:5px 0px 5px 0px !important
+    }
+
+    .fs-3{
+        font-size: calc(1.37rem + .3vw) !important;
+    }
+}
+

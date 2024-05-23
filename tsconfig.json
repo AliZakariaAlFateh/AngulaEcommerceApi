@@ -22,12 +22,16 @@
     "lib": [
       "ES2022",
       "dom"
-    ]
+    ],
+    //for jQuery
+    "typeRoots": ["node_modules/@types"],
+    "types": ["jquery"]
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,
     "strictInjectionParameters": true,
     "strictInputAccessModifiers": true,
     "strictTemplates": true
-  }
+  },
+
 }

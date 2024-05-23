@@ -1,0 +1,243 @@
+<div *ngIf="error" class="alert alert-danger">
+    {{ error }}
+  </div>
+  <div *ngIf="loading">
+    <!-- Display spinner loading indicator when loading is true -->
+    <ngx-spinner bdColor="rgba(51,51,51,0.8)" size="medium" color="#fff" type="ball-clip-rotate-multiple"></ngx-spinner>
+    <div class="spinner-border text-primary" role="status">
+      <span class="sr-only">Loading...</span>
+    </div>
+  </div>
+  
+  <!-- Display data table when loading is false   *ngIf="!error" !loading && !error --> 
+  <div *ngIf="!loading && !error"  class="content">
+    <!-- Your table code goes here -->
+          <div  class="header">
+              <!--header-->
+                <div class="m-2">
+
+                    <!-- class="button"  
+                     [routerLink]="['/dashboard/products/add']"
+                    -->
+                    <button class="btn btn-primary" id="form-open"> Add Category</button>
+                  
+                </div>
+          </div>
+          <div  class="content">
+            <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Category Name</th>
+            <th scope="col">Category Image</th>
+            <th scope="col">Details</th>
+            <th scope="col">Update</th>
+            <th scope="col">Delete</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let Category of Categories ; let i=index">
+            <th scope="row">{{i+1}}</th>
+            <td>{{Category.categoryName}} kdkdkskds    ::::::::;  {{Category.catimageName}}</td>
+
+            <!-- <td  *ngFor="let product of Category.products  ; let i=index">{{product.price}}</td> -->
+            <td>
+              <!-- <img src="https://localhost:7269/resources/{{prod?.imageName}}" alt="" srcset="" width="100px" height="100px"> -->
+                    <img *ngIf="Category.catimageName" [src]="'https://localhost:7269/resources/' + Category.catimageName" [title]="Category.catimageName" [alt]="Category.catimageName" width="100px" height="100px">
+                    <img *ngIf="!Category.catimageName" [src]="'https://localhost:7269/resources/ProductImage.jpg'" [title]="'Product Avatar'" [alt]="'Product Avatar'" width="100px" height="100px">
+                    <p>{{Category.catimageName}}</p>
+            </td>
+            <!-- <td>{{prod.categoryid}}</td> -->
+            <!-- <td> <i class="bi text-primary fs-4 bi-info-circle"[routerLink]="['/dashboard/products/details',Category.id]"></i></td> -->
+
+            <!-- data-bs-toggle="modal" data-bs-target="#staticBackdrop" -->
+            <td> 
+                <!-- <i class="bi text-primary fs-4 bi-info-circle" id="add__to__cart" (click)="GetCategForDetails(Category.id)"></i> -->
+                <!-- id="add__to__cart" -->
+                <i class="bi text-primary fs-4 bi-info-circle" data-bs-toggle="modal" data-bs-target="#staticBackdrop2"  (click)="GetCategForDetails(Category.id)"></i>
+            
+            </td>
+            <td> 
+                <!-- <i class="bi text-warning fs-4 bi-pencil-square" id="form-open3" ></i> -->
+                <!-- <button class="btn btn-primary" #formOpen2> Edit Category</button> -->
+                <i class="bi text-warning fs-4 bi-pencil-square" id="form-open2" (click)="SendToEdit(Category.id)"></i>
+            </td>
+            <!-- [routerLink]="['/dashboard/products','edit',Category.id]" -->
+            <!-- <td> <i class="bi text-danger fs-4 bi-trash red" (click)="Delete(prod.id)"></i></td> -->
+            <td>
+              <i type="button" class="bi text-danger fs-4 bi-trash red" data-bs-toggle="modal" data-bs-target="#staticBackdrop" (click)="SendIDForBackEnd(Category.id)">
+              </i> 
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      
+  
+      <!--Modal For Delete......................-->
+      <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="staticBackdropLabel"></h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              Are you sure you want to delete {{productnameDeleted}} ? 
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-danger" (click)="Delete(IdForDelete)" data-bs-dismiss="modal">Confirm Delete</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+
+
+
+      <section class="home">
+            <div class="form_container">
+                <i class="fa-solid fa-circle-xmark form_close"></i>
+              <!-- <i class="uil uil-times "></i> -->
+              <!-- Login Form -->
+           <div class="form login_form">
+            <form [formGroup]="Category" (submit)="SubmitCategory()" id="AddCategory">
+                <h1>{{CategoryId ? 'Edit Category ': 'Add Category'}}</h1>
+              <!-- <h2>Add Category</h2> -->
+              <div class="input_box">
+                <input 
+                type="text" placeholder="Enter Category Name"  id="categoryName" 
+                class="form-control" 
+                formControlName="categoryName"
+                [ngClass]="{
+                  'is-invalid':!CategoryNameControl?.valid && CategoryNameControl?.touched,
+                  'is-valid':CategoryNameControl?.valid
+                }" required
+                >
+                
+                <!-- <i class="uil-user-square"></i> -->
+                <i class="fa-solid fa-file-signature"></i>
+                <div class="valid-feedback">
+                  Good !
+                </div>
+                <div class="invalid-feedback" *ngIf="CategoryNameControl?.errors && CategoryNameControl?.hasError('required')">
+                  Name required
+                </div>
+    
+                <div class="invalid-feedback" *ngIf="CategoryNameControl?.errors && CategoryNameControl?.hasError('minlength')">
+                  Email must be at least 7 letters....
+                </div>
+                <div class="invalid-feedback" *ngIf="CategoryNameControl?.errors && CategoryNameControl?.hasError('maxlength')">
+                  Email must not exceed 100 letters....
+                </div>
+    
+              </div>
+              <div class="input_box">
+                <i class="fa-solid fa-image"></i>
+                <!-- <i class="uil uil-images"></i> -->
+                <input type="file"  (change)="onFileSelectedImage($event)">
+              </div>
+              <div class="col-md-5 justify-content-center"  #imageDiv [style.display]="url? 'block' : 'none'">
+                <!-- Use ngIf to conditionally display the image -->
+                <img src="{{ url }}" alt="" srcset="" width="100px" height="100px" >
+              </div>
+              <button class="button" type="submit" [disabled]="!Category.valid">Signup Now</button>
+            </form>
+          </div>
+        </div>
+      </section>
+
+
+
+
+
+
+
+
+
+
+
+
+      <!-- <section class="home2">
+        <div class="form_container2">
+            <i class="fa-solid fa-circle-xmark form_close"></i>
+       <div class="form login_form">
+           
+          <div>
+            <p>{{CategoryForDetails?.id}}</p>
+            <p>{{CategoryForDetails?.categoryName}}</p>
+          </div>
+
+          <div class="input_box">
+            <i class="fa-solid fa-image"></i>
+            <input type="file"  (change)="onFileSelectedImage($event)">
+          </div>
+          <div class="col-md-5 justify-content-center"  #imageDiv [style.display]="url? 'block' : 'none'">
+            <img src="{{ url }}" alt="" srcset="" width="100px" height="100px" >
+          </div>
+
+      </div>
+    </div>
+  </section> -->
+
+
+
+  <!-- <div class="event__container" #dialog>
+    <div class="event__content">
+      <div class="ticket__container">
+        <label for="ticket__quantity">Number of Tickets:</label>
+        <select id="ticket__quantity" name="ticket__quantity">
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+          <option value="5">5</option>
+          <option value="6">6</option>
+          <option value="7">7</option>
+          <option value="8">8</option>
+        </select>
+
+        <button >Add to Cart</button>
+      </div>
+    </div>
+  </div>
+  <dialog>
+    <div class="heading">
+      <h3> This event is sold out</h3>
+
+      <button id="close__dialog" autofocus>&#88;</button>
+    </div>
+
+          <div>
+            <p>{{CategoryForDetails?.id}}</p>
+            <p>{{CategoryForDetails?.categoryName}}</p>
+          </div>
+  </dialog> -->
+
+  <!-- <app-modal [showModal]="isModalOpen"></app-modal> -->
+
+
+
+   
+  <!--Modal For Details......................-->
+  <div class="modal fade" id="staticBackdrop2" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="staticBackdropLabel"></h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body" style="text-align: center;">
+            <!-- <p>{{CategoryForDetails?.id}}</p> -->
+            <p>{{CategoryForDetails?.categoryName}}</p>
+            <img *ngIf="CategoryForDetails?.catimageName" [src]="'https://localhost:7269/resources/' + CategoryForDetails?.catimageName" [title]="CategoryForDetails?.catimageName" [alt]="CategoryForDetails?.catimageName" width="100px" height="100px">
+            <img *ngIf="!CategoryForDetails?.catimageName" [src]="'https://localhost:7269/resources/ProductImage.jpg'" [title]="'Product Avatar'" [alt]="'Product Avatar'" width="100px" height="100px">
+        </div>
+        <div class="modal-footer justify-content-center" style="text-align: center;">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <!-- <button type="button" class="btn btn-danger" (click)="Delete(IdForDelete)" data-bs-dismiss="modal">Confirm Delete</button> -->
+        </div>
+      </div>
+    </div>
+  </div>

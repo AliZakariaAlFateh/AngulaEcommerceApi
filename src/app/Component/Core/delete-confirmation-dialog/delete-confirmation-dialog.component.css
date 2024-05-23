@@ -1,0 +1,79 @@
+.mat-dialog-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black */
+    z-index: 99998; /* Ensure the overlay is below the dialog */
+  }
+  
+  .mat-dialog-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 20px;
+    z-index: 99999; /* Ensure the dialog is on top of the overlay */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .mat-dialog-content {
+    background-color: #fff; /* White background for dialog content */
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* Shadow effect for the dialog */
+  }
+  .mat-dialog-container.mat-dialog-container-visible {
+    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black */
+  }  
+
+  .modal-header{
+    position: relative;
+    right: -300px;
+  }
+
+  .modal-content{
+
+
+    background-color: #fff;
+    width:fit-content;
+  }
+ .modal-footer{
+    justify-content: center;
+    justify-items: center;
+
+ }
+  .modal-body{
+
+    text-align: center;
+  }
+  .confirmation-dialog-container {
+    max-width: 400px;
+    padding: 20px;
+    border-radius: 8px;
+    background-color: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .confirmation-dialog-title {
+    font-size: 24px;
+    margin-bottom: 10px;
+  }
+  
+  .confirmation-dialog-message {
+    font-size: 16px;
+    margin-bottom: 20px;
+  }
+  
+  .confirmation-dialog-actions {
+    display: flex;
+    justify-content: flex-end;
+  }
+  
+  .confirmation-dialog-button {
+    margin-left: 10px;
+  }
