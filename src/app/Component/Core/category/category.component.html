@@ -38,14 +38,14 @@
         <tbody>
           <tr *ngFor="let Category of Categories ; let i=index">
             <th scope="row">{{i+1}}</th>
-            <td>{{Category.categoryName}} kdkdkskds    ::::::::;  {{Category.catimageName}}</td>
+            <td>{{Category.categoryName}}</td>
 
             <!-- <td  *ngFor="let product of Category.products  ; let i=index">{{product.price}}</td> -->
             <td>
               <!-- <img src="https://localhost:7269/resources/{{prod?.imageName}}" alt="" srcset="" width="100px" height="100px"> -->
                     <img *ngIf="Category.catimageName" [src]="'https://localhost:7269/resources/' + Category.catimageName" [title]="Category.catimageName" [alt]="Category.catimageName" width="100px" height="100px">
                     <img *ngIf="!Category.catimageName" [src]="'https://localhost:7269/resources/ProductImage.jpg'" [title]="'Product Avatar'" [alt]="'Product Avatar'" width="100px" height="100px">
-                    <p>{{Category.catimageName}}</p>
+                    <!-- {{Category.catimageName}} -->
             </td>
             <!-- <td>{{prod.categoryid}}</td> -->
             <!-- <td> <i class="bi text-primary fs-4 bi-info-circle"[routerLink]="['/dashboard/products/details',Category.id]"></i></td> -->

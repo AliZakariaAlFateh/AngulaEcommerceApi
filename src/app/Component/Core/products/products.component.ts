@@ -1,83 +1,5 @@
 import { HttpHeaders } from '@angular/common/http';
-// import { ProductsService } from './../../../Services/products.service';
-// import { Component, OnInit, ViewChild, Input } from '@angular/core';
-// import { IProduct } from '../../Model/iproduct';
-
-// @Component({
-//   selector: 'app-products',
-//   templateUrl: './products.component.html',
-//   styleUrls: ['./products.component.css']
-// })
-// export class ProductsComponent implements OnInit {
-//   products:IProduct[]=[];
-  
-//   //here i 'll inject services at constructor ----> (prodservice)....
-//   constructor(private prodservice:ProductsService){
-
-//   }
-
-//   ngOnInit(): void {
-//     this.products=this.prodservice.getall();
-//   }
-
-//   //then i use the services in onInit
-
-//   Delete(id:number){
-
-//     var res=confirm('Are you sure to delete this item .')
-//     if(res)
-//     {
-//       this.prodservice.delete(id);
-//     }
-//   }
-
-// }
-
-
-
-
-/////////////////////////////////////// Using Api //////////////////
-
-
-// import { ProductsService } from '../../../Services/products.service';
-// import { Component, OnInit } from '@angular/core';
-// import { IProduct } from '../../Model/iproduct';
-// import { ProductWithApiService } from 'src/app/Services/product-with-api.service';
-
-// @Component({
-//   selector: 'app-products',
-//   templateUrl: './products.component.html',
-//   styleUrls: ['./products.component.css']
-// })
-// export class ProductsComponent implements OnInit {
-//   products:IProduct[]=[];
-  
-//   //here i 'll inject services at constructor ----> (prodservice)....
-//   constructor(private prodserviceapi:ProductWithApiService){
-
-//   }
-
-//   ngOnInit(): void {
-//     // this.products=this.prodservice.getall();
-//     //to connect api with service
-//     this.prodserviceapi.getAll().subscribe({
-//       next:(data) =>{this.products=data;},
-//       error:(err) =>{console.log('Error'+err)},
-//       complete:() =>{}
-//     })
-//     console.log(this.products)
-//   }
-
-//   //then i use the services in onInit
-//      Delete(id:number){
-//       this.prodserviceapi.delete(id).subscribe(()=>{
-//        this.products= this.products.filter((prod)=>prod.id != id);
-        
-//       });
-//      }
-// }
-//import { MatDialog } from '@angular/material/dialog';
-import { Component, ElementRef, Input, OnInit, Output, Renderer2, ViewChild } from '@angular/core';
+import { Component, Directive, ElementRef, Input, OnInit, Output, Renderer2, ViewChild } from '@angular/core';
 import { IProduct } from '../../Model/iproduct';
 import { ProductWithApiService } from 'src/app/Services/product-with-api.service';
 import Swal from 'sweetalert2';
@@ -88,6 +10,9 @@ import { DeleteConfirmationDialogComponent } from '../delete-confirmation-dialog
 import { NavbarComponent } from '../../Shared/navbar/navbar.component';
 import * as $ from 'jquery';
 import 'bootstrap';
+import { CountAction } from '../../Model/iCountAction';
+import { ShoppingbasketService } from 'src/app/Services/shoppingbasket.service';
+
 
 
 // interface Notification {
@@ -111,14 +36,14 @@ interface ProductInternalInterface {
   qty: number;
 }
 
-interface CountAction {
-  productId: number;
-  productName:string;
-  count: number;
-  inedxOfItem:number;
-  imageName:string;
-  price:number;
-}
+// interface CountAction {
+//   productId: number;
+//   productName:string;
+//   count: number;
+//   inedxOfItem:number;
+//   imageName:string;
+//   price:number;
+// }
 interface CountAction1 {
   productId: number;
   count: number;
@@ -132,13 +57,18 @@ interface CountAction1 {
 })
 
 export class ProductsComponent implements OnInit {
-  
+  @Directive({
+    selector: '[displayDiveFromWishList]'
+  })
+  @Input('displayDiveFromWishList') customProperty: any;
   //notifications: Notification[] = [];
   //notifications = [];
+  shouldHideDiv: boolean = false;
   showNotification: boolean = false;
   wishlistItems: CountAction[] = [];
   notifications: Notification[] = [];
   products: IProduct[] = [];
+  
   createdProductUrl: string | null = null;
   loading = true; // Flag to track loading status
   error: string | null = null;
@@ -149,23 +79,14 @@ export class ProductsComponent implements OnInit {
   countActions: CountAction[] = [];
   @ViewChild(NavbarComponent)navbar!: NavbarComponent;
   //@Input()navbar!:NavbarComponent;
+  //@Input() displayDiveFromWishList:number|undefined
   @Output() IdForDelete:number=0;
   @Output() productnameDeleted:string="";
   constructor(private prodserviceapi: ProductWithApiService,private spinner: NgxSpinnerService
     ,private dialog: MatDialog,private elementRef: ElementRef,private render:Renderer2
+    ,private shopingbin:ShoppingbasketService
     //,private navBarForAction:NavbarComponent
-    ) {
-
-      // const storedProductCounts = localStorage.getItem('ProductscountItems');
-      // if (storedProductCounts) {
-      //   this.productCounts = JSON.parse(storedProductCounts) as number[];
-      // } else {
-      //   this.productCounts = [];
-      // }
-  
-      // // Save the initial productCounts array to local storage
-      // localStorage.setItem('ProductscountItems', JSON.stringify(this.productCounts));
-    }
+    ) {}
 
     // 
   ngOnInit(): void {
@@ -173,57 +94,8 @@ export class ProductsComponent implements OnInit {
 
     //////////////////End   Notification
 
-
-    // const notificationData = [
-    //   { 
-    //     title: "Notification Title a", 
-    //     body: "This is the first macOS-style notification for your web application.",
-    //     imgUrl: "https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/i/075007f6-42d1-410f-9cfd-105699dc8c31/devzjrq-861495c9-1341-4c60-87c4-8c0c78cacc75.png"
-    //   },
-    //   { 
-    //     title: "Notification Title b", 
-    //     body: "This is the second macOS-style notification for your web application.",
-    //     imgUrl: "https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/i/075007f6-42d1-410f-9cfd-105699dc8c31/devzjrq-861495c9-1341-4c60-87c4-8c0c78cacc75.png"
-    //   },
-    //   { 
-    //     title: "Notification Title c", 
-    //     body: "This is the third macOS-style notification for your web application.",
-    //     imgUrl: "https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/i/075007f6-42d1-410f-9cfd-105699dc8c31/devzjrq-861495c9-1341-4c60-87c4-8c0c78cacc75.png"
-    //   }
-    // ];
-
-    // notificationData.forEach((data, index) => {
-    //   setTimeout(() => {
-    //     this.createNotification(data.title, data.body, data.imgUrl);
-    //   }, 1000 + 5000 * index); // Increase delay for each notification
-    // });
-
-
-    /////////////Start  Notification
-
-
-    // let count=0
-    // const ProductItemsCount = localStorage.getItem('ProductscountItems');
-    // if(ProductItemsCount){
-
-    //   const productCountss2 =ProductItemsCount; // or replace `this.productCounts` with the actual reference
-      
-    //   const spans = document.querySelectorAll('span.Display_Icreasing_Decreasing');
-      
-    //   // Loop through each span and set its value from productCounts
-    //   spans.forEach((span, index) => {
-    //       // Ensure that the productCounts has a value for this index
-    //       if (productCountss2[index] !== undefined) {
-    //           span.textContent = productCountss2[index].toString();
-    //           count++
-    //       }
-    //   });
-    // }
-    // console.log("count of spans are :: ",count)
-
-    // Select all spans with the class Display_Icreasing_Decreasing
     
-    
+    ///For WIshList and count the number of products and its indecies
     const storedWishListIndecies = localStorage.getItem('WishListproductIndeciesStorage');
     if (storedWishListIndecies){
       this.productCounts=JSON.parse(storedWishListIndecies)
@@ -233,6 +105,7 @@ export class ProductsComponent implements OnInit {
     else{
       this.WishListproductIndecies=[]
     }
+    console.log("From product component wishlist count ::::::::::::",this.WishListproductCounts)
     // Show the spinner
     this.spinner.show();
     
@@ -257,48 +130,9 @@ export class ProductsComponent implements OnInit {
   ////////////////Notification Functions 
 
 
-  // createNotification(title: string, body: string, imgUrl: string) {
-  //   const newNotification: Notification = {
-  //     title,
-  //     body,
-  //     imgUrl,
-  //     hidden: true
-  //   };
-
-  //   this.notifications.unshift(newNotification);
-
-  //   setTimeout(() => {
-  //     newNotification.hidden = false;
-  //   }, 100);
-
-  //   setTimeout(() => {
-  //     this.closeNotification(newNotification);
-  //   }, 30000);
-  // }
-
-  // closeNotification(notification: Notification) {
-  //   notification.hidden = true;
-  //   setTimeout(() => {
-  //     this.notifications = this.notifications.filter(notif => notif !== notification);
-  //   }, 500);
-  // }
-
-   
-
   
 
   /////////////////Notification Functions 
-
-
-
-
-
-
-
-
-
-
-
 
 
   loadProducts() {
@@ -307,6 +141,9 @@ export class ProductsComponent implements OnInit {
     this.prodserviceapi.getAll().subscribe({
       next: (data: IProduct[]) => {
         this.products = data;
+        
+        localStorage.setItem('allProducts', JSON.stringify(this.products));
+        
 
         const storedProductCounts = localStorage.getItem('ProductscountItems');
         if (storedProductCounts){
@@ -331,56 +168,7 @@ export class ProductsComponent implements OnInit {
   }
   
    
-  // loadProducts() {
-  //   this.loading = true; // Set loading to true when data loading starts
-  //   this.prodserviceapi.getAll().subscribe({
-  //     next: (data) => {
-  //       this.products = data;
-  //       this.loading = false; // Set loading to false when data loading completes
-  //     },
-  //     error: (err) => {
-  //       console.log('Error:', err);
-  //       this.loading = false; // Set loading to false in case of error
-  //     }
-  //   });
-  // }
-
-
-  // loadProducts() {
-  //   this.prodserviceapi.getAll().subscribe({
-  //     next: (data) => {
-  //       this.products = data;
-  //     },
-  //     error: (err) => {
-  //       console.log('Error:', err);
-  //     }
-  //   });
-  // }
-
-  // createProduct(newProduct: IProduct) {
-  //   this.prodserviceapi.add(newProduct).subscribe({
-  //     next: (response) => {
-  //       console.log('Product created:', response.body.product);
-  //       console.log('Message:', response.body.message);
-  //       const locationHeader = response.headers.get('Location');
-  //       if (locationHeader !== null) {
-  //         this.createdProductUrl = locationHeader;
-  //         console.log('URL:', this.createdProductUrl);
-  //       } else {
-  //         console.log('No URL returned from the server');
-  //       }
-  //     },
-  //     error: (err) => {
-  //       console.log('Error:', err);
-  //     }
-  //   });
-  // }
-
-  // delete(id: number) {
-  //   this.prodserviceapi.delete(id).subscribe(() => {
-  //     this.products = this.products.filter((prod) => prod.id !== id);
-  //   });
-  // }
+  
   SendIDForBackEnd(id:number){
     //console.log(`"id for product is :: "${id }`)
     let ProductDeleted = this.products.find(prod => prod.id === id);
@@ -454,206 +242,15 @@ export class ProductsComponent implements OnInit {
   }
   
 
-  // // Display_Icreasing_Decreasing
-
-  // increasing(event:any,id:number){
-
-  //   const Span = this.elementRef.nativeElement.querySelector(".Display_Icreasing_Decreasing");
-  //   //console.log(event)
-  //   const btnincrease=event.target as HTMLElement;
-
-  //  // Span.innerHtmel=event
-  //  console.log("Hiiiii in Increasing Item")
-  //  //let prodid=btnincrease.getAttribute("name")
-  //  const spannext=btnincrease.nextSibling as HTMLElement
-  //  let value=parseInt(spannext.innerText,10)
-  //  ++value
-  //  this.render.setProperty(spannext,'innerText',value)
-  //  console.log("This is the data-id propartyinclude id for product for increasing  :::",id)
-  // }
-
-  // decreasing(event: any,id:number){
-
-  //   const Span = this.elementRef.nativeElement.querySelector(".Display_Icreasing_Decreasing") as HTMLElement;
-  //   //Span.getElementsByClassName("")
-  //   //console.log(event)
-  //   const btnDecrease=event.target as HTMLElement;
-
-
-  //   const spannext=btnDecrease.previousSibling as HTMLElement
-  //   let value=parseInt(spannext.innerText,10)
-  //   --value
-  //   this.render.setProperty(spannext,'innerText',value)
-
-
-  //  // btnDecreaseSpan.innerHtmel=event
-  //  //let prodid=btnDecrease.getAttribute("name")
-  //  console.log("This is the data-id propartyinclude id for product for Decrasing :::",id)
-  //  console.log("Hiiiii in Decreasing Item")
-   
-  // }
-
-    
-
-
-  // changeValue(index: number, delta: number,id:number) {
-  //   if (this.productCounts[index] + delta >= 0) { // Ensure the value doesn't go below 0
-  //     this.productCounts[index] += delta;
-  //     const productId = this.ProductsIds[index];
-  //     const action: 'increase' | 'decrease' = delta > 0 ? 'increase' : 'decrease';
-  //     const countAction: CountAction = { productId, count: delta, action };
-  //     this.countActions.push(countAction);
-  //     this.saveCountActions();
-  //   }
-  // }
-
-  // saveCountActions() {
-  //   localStorage.setItem('countActions', JSON.stringify(this.countActions));
-  // }
-
-  // loadCountActions() {
-  //   const countActionsStr = localStorage.getItem('countActions');
-  //   if (countActionsStr) {
-  //     this.countActions = JSON.parse(countActionsStr);
-  //     // Apply count actions to update counts
-  //     this.countActions.forEach(action => {
-  //       const index = this.ProductsIds.indexOf(action.productId);
-  //       if (index !== -1) {
-  //         if (action.action === 'increase') {
-  //           this.productCounts[index] += action.count;
-  //         } else if (action.action === 'decrease') {
-  //           this.productCounts[index] -= Math.abs(action.count);
-  //         }
-  //       }
-  //     });
-  //   }
-  // }
-  ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-
-  /////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  
-
-  // changeValue(index: number, delta: number,id:number) {
-  //   const newCount = this.productCounts[index] + delta;
-  //   const productQty = this.products[index].qty;
-  //   if (newCount >= 0  && newCount <= productQty) { // Ensure the value doesn't go below 0
-  //     this.productCounts[index] = newCount;
-  //     const productId = this.ProductsIds[index];
-  //     const ProductName=this.products[index].productName
-  //     const existingActionIndex = this.countActions.findIndex(action => action.productId === productId);
-
-  //     if (existingActionIndex !== -1) {
-
-  //       if (newCount === 0) {
-
-  //         this.countActions[existingActionIndex].count = newCount;
-  //         localStorage.setItem('ProductscountItems', JSON.stringify(this.productCounts));
-  //         // Remove the action if the new count is zero
-  //         this.countActions.splice(existingActionIndex, 1);
-  //         // this.productCounts[index] = newCount;
-
-  //         this.addNotification('warning', 'Warning!', `The product ${ProductName} is already removed from wishlist and count updated to ${newCount}..`);
-  //         console.log("lasttttttttttttttttttttttt",this.productCounts)
-  //         // Swal.fire({
-  //         //   title: 'Success!',
-  //         //   text: "The product now removed from wishlist......",
-  //         //   icon: 'success'
-  //         // });
-  //         // this.createNotification(
-  //         //   "Product Removed",
-  //         //   `${ProductName} has been removed from your wishlist.`,
-  //         //   "warning"
-  //         // );
-
-
-  //       } else {
-  //         // Update existing action
-  //         // this.navBarForAction.functionforUpdateItemsCount()
-  //         // if(this.navbar){
-            
-  //           // }
-            
-  //         //debugger
-          
-  //         //  if(localStorage.getItem('ProductscountItems')){
-            
-  //           //   this.productCounts=localStorage.getItem('ProductscountItems');
-            
-  //           //  }
-  //           // this.productCounts
-  //         //this.productCounts[existingActionIndex]=newCount
-  //         this.countActions[existingActionIndex].count = newCount;
-  //         localStorage.setItem('ProductscountItems', JSON.stringify(this.productCounts));
-  //         console.log("Products Ids after adding or minus products: ",this.ProductsIds)
-  //         console.log("Products Counts after adding or minus loadingProducts: ",this.productCounts)
-  //         // this.createNotification(
-  //         //   "Product Updated",
-  //         //   `${ProductName} count updated to ${newCount}.`,
-  //         //   "success"
-  //         // );
-  //         if(delta==-1){
-  //           this.addNotification('warning', 'Warning!', `The product ${ProductName} is already removed from wishlist and count updated to ${newCount}..`);
-
-  //         }else{
-
-  //           this.addNotification('success', 'Success!', `${ProductName} count updated to ${newCount}. to wishlis`);
-  //         }
-
-  //          console.log(this.productCounts)
-
-  //          //console.log(this.navbar.Ali)
-  //         // if(this.navbar){
-
-  //         //   this.navbar.functionforUpdateItemsCount()
-  //         //   console.log("component is Exists..........")
-  //         // }else{
-  //         //  console.log("this component not found ........")
-  //         // }
-          
-  //       } 
-  //     } else {
-  //       if (newCount > 0) {
-  //         // Add new action
-  //         const countAction: CountAction = { productId, count: newCount,productName:ProductName};
-  //         this.countActions.push(countAction);
-  //         // this.createNotification(
-  //         //   "Product Added",
-  //         //   `${ProductName} added to your wishlist.`,
-  //         //   "success"
-  //         // );
-  //         this.addNotification('success', 'Success!', `${ProductName} count added to ${newCount}. to wishlist`);
-
-  //         //this.showAlert()
-  //       }
-  //     }
-
-  //     this.saveCountActions();
-  //   }else if(newCount > productQty){
-
-  //     // Swal.fire({
-  //     //   icon: 'error',
-  //     //   title: 'Oops...',
-  //     //   text: `You cannot add more than ${productQty} items for ${this.products[index].productName}.`,
-  //     // });
-  //     this.addNotification('danger', 'Oops...', `You cannot add more than ${productQty} items for ${this.products[index].productName}.`);
-
-  //   }
-  //   else if(newCount < 0){
-  //     // Swal.fire({
-  //     //   title: 'Success!',
-  //     //   text: "The product is allready removed from wishlist......",
-  //     //   icon: 'success'
-  //     // });
-  //     this.addNotification('warning', 'Warning!', 'The product is already removed from wishlist.');
-
-  //   }
-
-  // }
-
+ ///////////////For Increasing and Decreasing buttons ////////////////////
   changeValue(index: number, delta: number, id: number) {
-    //debugger
+    debugger
+    const productcountsproductcompo=localStorage.getItem('ProductscountItems');
+    if(productcountsproductcompo)
+      {
+        console.log("From product component Counts of items paymented From Local Storage are  :::::  ",JSON.parse(productcountsproductcompo))
+        this.productCounts=JSON.parse(productcountsproductcompo)
+      }
     const newCount = this.productCounts[index] + delta;
     const productQty = this.products[index].qty;
     // const productId = this.ProductsIds[index];
@@ -669,6 +266,11 @@ export class ProductsComponent implements OnInit {
       }
 
     });
+    const countActionsStr1 = localStorage.getItem('countActions');
+    if (countActionsStr1) {
+      this.countActions = JSON.parse(countActionsStr1);
+      
+    }
     const existingActionIndex = this.countActions.findIndex(action => action.productId === id);
   
     // Validate newCount within the range
@@ -688,6 +290,19 @@ export class ProductsComponent implements OnInit {
       if (newCount === 0) {
         // Remove the action if the new count is zero
         this.countActions.splice(existingActionIndex, 1);
+        for(let i=0;i<this.WishListproductIndecies.length;i++){
+          if(this.WishListproductIndecies[i]==index)
+            {
+              this.WishListproductIndecies.splice(i,1)
+              
+              //this.shouldHideDiv=true;
+              //window.location.reload()
+
+              /////this.showWishlist()///
+              
+            }
+        }
+        //this.WishListproductIndecies
         
         this.addNotification('warning', 'Warning!', `The product ${ProductName} is already removed from wishlist and count updated to ${newCount}.`);
       } else {
@@ -728,10 +343,19 @@ export class ProductsComponent implements OnInit {
     //   console.log("WishListproductCounts after each add or minus are /is ............. ",this.WishListproductCounts)
     // }
     this.saveCountActions();
+    if(newCount==0){
+      if(this.showNotification==true){
+        
+        this.showWishlist()
+      }
+    }
+    
 
     const countActionsStr = localStorage.getItem('countActions');
-    if (countActionsStr) {
-      const arrofActions=JSON.parse(countActionsStr)
+    if (countActionsStr !== null && !this.isEmptyArray(countActionsStr)) {
+      const countActionsStr = localStorage.getItem('countActions'); // Example of how it might be set
+      const arrofActions = JSON.parse(countActionsStr as string);
+      //const arrofActions=JSON.parse(countActionsStr)
        for(let i=0;i<arrofActions.length;i++){
         this.WishListproductIndecies[i]=arrofActions[i].inedxOfItem
         this.WishListproductCounts[i]=arrofActions[i].count
@@ -745,13 +369,32 @@ export class ProductsComponent implements OnInit {
       console.log("WishListproductCounts after each add or minus are /is ............. ",this.WishListproductCounts)
 
     }
+    if(countActionsStr=== null || this.isEmptyArray(countActionsStr)){
+      
+      this.WishListproductCounts=[]
+      this.WishListproductIndecies=[]
+      localStorage.setItem('WishListproductIndeciesStorage', JSON.stringify(this.WishListproductIndecies));
+      //this.hideWishlist()
+      this.showWishlist()
+      // total_items_Class
+      this.updateTotalItemsClassText(0)
+      this.shouldHideDiv=true
+
+      
+    }
     console.log("Products Ids after adding or minus products: ", this.ProductsIds);
     console.log("Products Counts after adding or minus loadingProducts: ", this.productCounts);
+    let counttobin=0
+    this.WishListproductCounts.forEach(element=>{
+      counttobin+=element
+    })
+    this.shopingbin.updateBin(counttobin.toString());
   }
   
 
   saveCountActions() {
     localStorage.setItem('countActions', JSON.stringify(this.countActions));
+    this.shouldHideDiv=false
   }
 
   loadCountActions() {
@@ -767,142 +410,9 @@ export class ProductsComponent implements OnInit {
       });
     }
   }
-//////////////////////////////////////////////////////////
-/////////// For ALert/////////////////
-
-// showAlert() {
-//   const alert = $('#wishlist-alert');
-//   if (alert.length) {
-//     alert.removeClass('fade').addClass('show');
-//     setTimeout(() => {
-//       alert.addClass('fade').removeClass('show');
-//     }, 3000); // Auto-hide after 3 seconds
-//   }
-// }
-//to use $ i will install 
-//npm i --save-dev @types/jquery
-//install :npm install @types/jquery @types/bootstrap  for alert
-
-////////////////////////////////////////////////////////////////////////////////////
-
-  // changeValue(index: number, delta: number,id:number) {
-  //   const newCount = this.productCounts[index] + delta;
-  //   if (newCount >= 0) { // Ensure the value doesn't go below 0
-  //     this.productCounts[index] = newCount;
-  //     const productId = this.ProductsIds[index];
-  //     const existingActionIndex = this.countActions.findIndex(action => action.productId === productId);
-
-  //     if (existingActionIndex !== -1) {
-  //       // Update existing action
-  //       if(this.countActions[existingActionIndex].count==0){
-          
-  //         //this.countActions[existingActionIndex].splice(productId,1);
-  //       }
-  //       this.countActions[existingActionIndex].count = newCount;
-  //     } else {
-  //       // Add new action
-  //       const countAction: CountAction = { productId, count: newCount };
-  //       this.countActions.push(countAction);
-  //     }
-
-  //     this.saveCountActions();
-  //   }
-  // }
-
-  // saveCountActions() {
-  //   localStorage.setItem('countActions', JSON.stringify(this.countActions));
-  // }
-
-  // loadCountActions() {
-  //   const countActionsStr = localStorage.getItem('countActions');
-  //   if (countActionsStr) {
-  //     this.countActions = JSON.parse(countActionsStr);
-  //     // Apply count actions to update counts
-  //     this.countActions.forEach(action => {
-  //       const index = this.ProductsIds.indexOf(action.productId);
-  //       if (index !== -1) {
-  //         this.productCounts[index] = action.count;
-  //       }
-  //     });
-  //   }
-  // }
 
 
-
-
-//////////////////////////////////////////////////////////////
-
-
-
-
-
-
-
-
-
-
-
-
-  // changeValue(index: number, delta: number,id:number) {
-  //   if (this.productCounts[index] + delta >= 0) { // Ensure the value doesn't go below 0
-  //     this.productCounts[index] += delta;
-  //     console.log(this.productCounts)
-  //   }
-  // }
-
-  // increase(event: Event) {
-  //   const btnIncrease = event.target as HTMLElement;
-  //   const span = btnIncrease.nextElementSibling as HTMLElement;
-  //   if (span && span.classList.contains('Display_Icreasing_Decreasing')) {
-  //     let value = parseInt(span.innerText, 10);
-  //     value++;
-  //     this.render.setProperty(span, 'innerText', value);
-  //   } else {
-  //     console.error('Increase button: Could not find the next sibling span');
-  //   }
-  // }
-
-  // decrease(event: Event) {
-  //   const btnDecrease = event.target as HTMLElement;
-  //   const span = btnDecrease.previousElementSibling as HTMLElement;
-  //   if (span && span.classList.contains('Display_Icreasing_Decreasing')) {
-  //     let value = parseInt(span.innerText, 10);
-  //     value--;
-  //     this.render.setProperty(span, 'innerText', value);
-  //   } else {
-  //     console.error('Decrease button: Could not find the previous sibling span');
-  //   }
-  // }
-
-
-
-  // createNotification(title: string, body: string, type: 'success' | 'warning') {
-  //   const newNotification: Notification = {
-  //     title,
-  //     body,
-  //     type,
-  //     hidden: true
-  //   };
-
-  //   this.notifications.unshift(newNotification);
-
-  //   setTimeout(() => {
-  //     newNotification.hidden = false;
-  //   }, 100);
-
-  //   setTimeout(() => {
-  //     this.closeNotification(newNotification);
-  //   }, 30000);
-  // }
-
-  // closeNotification(notification: Notification) {
-  //   notification.hidden = true;
-  //   setTimeout(() => {
-  //     this.notifications = this.notifications.filter(notif => notif !== notification);
-  //   }, 500);
-  // }
-
-  
+  //////////////////////// For Notifications //////////////
   addNotification(type: 'success' | 'warning' | 'danger', title: string, body: string) {
     
     const notification: Notification = { type, title, body, hidden: false };
@@ -923,11 +433,24 @@ export class ProductsComponent implements OnInit {
 
 
 
+  updateTotalItemsClassText(newNumber: number) {
+    const totalItemsClassElement = this.elementRef.nativeElement.querySelector('.total_items_Class');
+    const totalItemsClassElement2 = this.elementRef.nativeElement.querySelector('.total_items_Class2');
+
+    if (totalItemsClassElement && totalItemsClassElement2) {
+      
+      this.render.setProperty(totalItemsClassElement, 'textContent', `${newNumber.toString()} item`);
+      this.render.setProperty(totalItemsClassElement2, 'textContent', `${newNumber.toString()} item`);
+    }
+
+  }
+
 
   ////////////////////////////////////
  /////////WishList///////////
   ////////////////////////////////////
   showWishlist(): void {
+    this.SetCountsOfItemsInWishList()
     // Retrieve countActions from local storage
     const countActionsJSON = localStorage.getItem('countActions');
     if (countActionsJSON) {
@@ -960,6 +483,40 @@ export class ProductsComponent implements OnInit {
   //     //this.calculateTotalPrice();
   //   }
   // }
+
+
+  isEmptyArray(str: string): boolean {
+    try {
+      const parsed = JSON.parse(str);
+      return Array.isArray(parsed) && parsed.length === 0;
+    } catch (e) {
+      // If JSON parsing fails, it's not a valid array
+      return false;
+    }
+  }
+
+
+  SetCountsOfItemsInWishList(){
+
+
+    const countActionsStr = localStorage.getItem('countActions');
+    if (countActionsStr !== null && !this.isEmptyArray(countActionsStr)) {
+      const countActionsStr = localStorage.getItem('countActions'); // Example of how it might be set
+      const arrofActions = JSON.parse(countActionsStr as string);
+      //const arrofActions=JSON.parse(countActionsStr)
+       for(let i=0;i<arrofActions.length;i++){
+        this.WishListproductIndecies[i]=arrofActions[i].inedxOfItem
+        this.WishListproductCounts[i]=arrofActions[i].count
+       }
+
+       console.log("WishListFromLocalStorage At beggining of the press to show list :::",this.WishListproductCounts)
+
+   }
+
+  }
+
+
+
 
 
 }

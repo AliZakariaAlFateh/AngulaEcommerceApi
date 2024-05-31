@@ -36,10 +36,13 @@
           <button class="btn btn-outline-success" type="submit">Search</button>
         </form> -->
 
-        <i class="fa-solid fa-cart-shopping AddCart">
-          <span id="ProductsCounter">00</span>
+        <!-- <button class="wishlist-button" (click)="showWishlist()">Show Wishlist</button> -->
+        <i class="fa-solid fa-cart-shopping AddCart" (click)="showWishlist()">
+          <!-- <a id="ProductsCounter" *ngIf="!bin">00</a> -->
+          <!-- *ngIf="bin" -->
+          <span>{{ bin }}</span>
         </i>
-
+        <i *ngIf="MyOrders" class="fab fa-first-order"></i>
         <ng-container *ngIf="CheckifTokenExists">
           <div class="dropdown">
             <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle text-bg-success rounded-2" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
@@ -513,4 +516,116 @@
 
 
 </section>
+
+
+
+
+
+<div class="notification-container">
+  <div *ngFor="let notification of notifications" class="notification" [ngClass]="{'hidden': notification.hidden, 'success-notification': notification.type === 'success', 'warning-notification': notification.type === 'warning', 'danger-notification': notification.type === 'danger'}">
+    <div class="innernoti">
+      <div class="icon">
+        <i class="fa" [ngClass]="{'fa-check': notification.type === 'success', 'fa-exclamation-triangle': notification.type === 'warning', 'fa-times': notification?.type === 'danger'}"></i>
+      </div>
+      <div class="text-content">
+        <div class="notification-header">
+          <span class="notification-title">{{ notification.title }}</span>
+        </div>
+        <div class="notification-body">{{ notification.body }}</div>
+      </div>
+      <button class="close-btn" (click)="closeNotification(notification)">&times;</button>
+    </div>
+  </div>
+</div>
+
+
+
+
+<!--Wishlist-->
+<div *ngIf="showNotification" class="wishlist-notification">
+  <div class="innernoti">
+    <div class="notification-header">
+      <span class="notification-title2">Wishlist Items</span>
+      <button class="close-btn" (click)="hideWishlist()">&times;</button>
+    </div>
+    <div class="wishlist-content">
+      <ul class="wishlist-items">
+        <li class="dropdown-menu-header">
+          <div class="dropdown-header d-flex">
+            <h4 class="notification-title2 mb-0 mr-auto">My Cart</h4>
+            <div class="badge badge-pill badge-light-primary total_items_Class">{{ wishlistItems.length }} Items</div>
+          </div>
+        </li>
+        <div class="shopping-cart" [appDisplayDiveFromWishList]="shouldHideDiv">
+          <h2>My Cart ({{ wishlistItems.length }} Items)</h2>
+          <ul style="list-style: none;">
+            <li *ngFor="let item of wishlistItems; let i = index">
+              <!-- displayDiveFromWishList={{WishListproductIndecies[i]}} -->
+              <div class=" container cart-item" >
+                <!-- imageName -->
+                
+                <img [src]="'https://localhost:7269/resources/' + item.imageName"  alt="{{ item.productName }}">
+                <!-- [appDisplayDiveFromWishList]="shouldHideDiv" -->
+                <div class="row item-details" >
+                  <h3 class="col-7">{{ item.productName }}</h3>
+                  <!-- <span class="col-2">ID ::::::: {{ item.productId }}</span> -->
+                  <span  class="col-3 quantity justify-content-center" >
+                    <button (click)="changeValue(WishListproductIndecies[i], -1, item.productId)">-</button>
+                    <span>{{ WishListproductCounts[i] }}</span> 
+                    <!-- <span>The Index Of Item in NavBar is :::: " {{WishListproductIndecies[i]}} "</span> -->
+                    <!-- <span>{{item.count}}</span> -->
+                    <button (click)="changeValue(WishListproductIndecies[i], 1, item.productId)">+</button>
+                    <span class="price col-1">${{ item.price }}</span>
+                    <span class="col-1" (click)="removeItemFromWishList(item.productId,WishListproductIndecies[i])">
+                      <i class="fa-solid fa-circle-xmark removeFromWishList"></i>
+                    </span>
+                  </span>
+                </div>
+              </div>
+            </li>
+
+
+
+            <!-- <div class="media align-items-center"><img class="d-block rounded mr-1" src="../../../app-assets/images/pages/eCommerce/7.png" alt="donuts" width="62">
+              <div class="media-body"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x ficon cart-item-remove"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                  <div class="media-heading">
+                      <h6 class="cart-item-title"><a class="text-body" href="app-ecommerce-details.html"> Google Home Mini</a></h6><small class="cart-item-by">By Google</small>
+                  </div>
+                  <div class="cart-item-qty">
+                      <div class="input-group bootstrap-touchspin">
+                          <span class="input-group-btn input-group-prepend bootstrap-touchspin-injected"><button class="btn btn-primary bootstrap-touchspin-down" type="button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-minus"><line x1="5" y1="12" x2="19" y2="12"></line></svg></button></span><input class="touchspin-cart form-control" type="number" value="3"><span class="input-group-btn input-group-append bootstrap-touchspin-injected"><button class="btn btn-primary bootstrap-touchspin-up" type="button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-plus"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg></button></span>
+                      </div>
+                  </div>
+                  <h5 class="cart-item-price">$129.40</h5>
+              </div>
+          </div> -->
+
+
+
+
+
+          </ul>
+          <div class="total">
+            <button (click)="Save_order()">Checkout</button>
+          </div>
+        </div>
+      </ul>
+      <div class="wishlist-footer">
+        <span class="total_items_Class2">Total Items: {{ wishlistItems.length }}</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+<!-- Spinner overlay -->
+<div *ngIf="isLoading" class="spinner-overlay">
+  <div class="spinner-wrapper">
+    <div class="spinner"></div>
+    <span class="spinner-title">{{ loadingTitle }}...</span>
+  </div>
+</div>
 

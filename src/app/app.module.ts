@@ -30,6 +30,7 @@ import { TokeniterceptorService } from './Services/tokeniterceptor.service';
 import { CategoryComponent } from './Component/Core/category/category.component';
 import { ModalComponent } from './Component/Shared/modal/modal.component';
 import { UnauthorizedcomponentComponent } from './Component/Shared/unauthorizedcomponent/unauthorizedcomponent.component';
+import { DisplayDiveFromWishListDirective } from './display-dive-from-wish-list.directive';
 
 @NgModule({
   declarations: [
@@ -52,6 +53,7 @@ import { UnauthorizedcomponentComponent } from './Component/Shared/unauthorizedc
     CategoryComponent,
     ModalComponent,
     UnauthorizedcomponentComponent,
+    DisplayDiveFromWishListDirective,
    
 
   ],

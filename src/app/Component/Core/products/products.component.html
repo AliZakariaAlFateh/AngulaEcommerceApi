@@ -7,14 +7,26 @@
 
 <div *ngIf="error" class="alert alert-danger">
     {{ error }}
+</div>
+
+<!-- <div *ngIf="loading" class="spinner-overlay">
+  <ngx-spinner
+    bdColor="rgba(51,51,51,0.8)"
+    size="medium"
+    color="#fff"
+    type="ball-clip-rotate-multiple"
+  ></ngx-spinner>
+  <div class="spinner-wrapper">
+    <span class="spinner-title">Load Data......</span>
   </div>
-    <div *ngIf="loading">
-        <!-- Display spinner loading indicator when loading is true -->
-        <ngx-spinner bdColor="rgba(51,51,51,0.8)" size="medium" color="#fff" type="ball-clip-rotate-multiple"></ngx-spinner>
-        <div class="spinner-border text-primary" role="status">
-          <span class="sr-only">Loading...</span>
-        </div>
-    </div>
+</div> -->
+
+<div *ngIf="loading" class="spinner-overlay">
+  <div class="spinner-wrapper">
+    <div class="spinner"></div>
+    <span class="spinner-title">Loading Data..</span>
+  </div>
+</div>
   
   <!-- Display data table when loading is false   *ngIf="!error" !loading && !error --> 
   <div *ngIf="!loading && !error"  class="content">
@@ -37,32 +49,53 @@
 
 
                 <div class="card m-1 text-center col-lg-3 col-md-4 col-sm-6 " *ngFor="let prod of products ; let i=index">
-                  <!-- <img src="{{CardImage}}" class="card-img-top" alt="Image For Product"> -->
-                  <!--ProductImage.jpg
-                  {{ProductId ? 'Edit product ': 'Add product'}}
-                  -->
 
 
 
 
-                  <ng-container *ngIf="prod.imageName; else noImage">
+                  <figure class="snip1268">
+                    <div class="image">
+                      <ng-container *ngIf="prod.imageName; else noImage">
+                        <img [src]="'https://localhost:7269/resources/' + prod.imageName" class="card-img-top" [title]="prod.imageName" [alt]="prod.imageName" height="200px">
+                      </ng-container>
+                      <ng-template #noImage>
+                        <img src="https://localhost:7269/resources/ProductImage.jpg" class="card-img-top" title="Product Avatar" alt="Product Avatar" height="200px">
+                      </ng-template>
+                      <div class="icons">
+                        <button class="btn btn-outline-success increase_decrease_btn" (click)="changeValue(i, 1,prod.id)"><i class="fa-solid fa-caret-up iconIncrease"></i></button>
+                        <span class="Display_Icreasing_Decreasing nnmumber" >{{productCounts[i]}}</span>
+                        <button class="btn btn-outline-danger increase_decrease_btn" (click)="changeValue(i, -1,prod.id)"><i class="fa-solid fa-caret-down iconDecrese"></i></button>
+                      </div>
+                    </div>
+                    <figcaption>
+                      <h2>{{prod.productName}}</h2>
+                      <!-- <p>Miss Wormwood: What state do you live in? Calvin: Denial. Miss Wormwood: I don't suppose I can argue with that!</p> -->
+                      <div class=""style="border-top-left-radius: 10px;border-bottom-right-radius: 10px;background-color: black;color: #fff;">Total quantity :: {{prod.qty}} </div>
+                      <div class="price">${{prod.price}} </div>
+                      <br><br>
+                      <a class="add-to-cart" (click)="changeValue(i, 1,prod.id)">Add to Cart</a>
+                    </figcaption>
+                  </figure>
+                
+
+                <br><br><br>
+
+
+
+
+
+                  <!-- <ng-container *ngIf="prod.imageName; else noImage">
                     <img [src]="'https://localhost:7269/resources/' + prod.imageName" class="card-img-top" [title]="prod.imageName" [alt]="prod.imageName" height="200px">
                   </ng-container>
                   <ng-template #noImage>
                     <img src="https://localhost:7269/resources/ProductImage.jpg" class="card-img-top" title="Product Avatar" alt="Product Avatar" height="200px">
                   </ng-template>
 
-
-
                   <div class="card-body">
                     <h5 class="card-title" style="height:70px">{{prod.productName}}</h5>
                     <p class="card-text" style="border-top-left-radius: 10px;border-bottom-right-radius: 10px;background-color: rgb(255, 60, 0);color: #fff; width:50%"> Price : {{prod.price}} $</p>
                     <p class="card-text" style="border-top-left-radius: 10px;border-bottom-right-radius: 10px;background-color: black;color: #fff;">Quant : {{prod.qty}}</p>
-                    <!-- <p class="card-text">{{prod.categoryid}}</p> -->
-                    <!-- <button class="btn_Increasing btn btn-outline-success" (click)="increasing($event,prod.id)"><i class="fa-solid fa-caret-up"></i></button>
-                    <span class="Display_Icreasing_Decreasing">0</span>
-                    <button class="btn_Decreasing btn btn-outline-danger" (click)="decreasing($event,prod.id)"><i class="fa-solid fa-caret-down"></i></button>
-                    <a href="#" class="btn btn-primary">Add To Cart</a> -->
+
                     <button class="btn btn-outline-success" (click)="changeValue(i, 1,prod.id)"><i class="fa-solid fa-caret-up"></i></button>
                     <span class="Display_Icreasing_Decreasing">{{productCounts[i]}}</span>
                     <button class="btn btn-outline-danger" (click)="changeValue(i, -1,prod.id)"><i class="fa-solid fa-caret-down"></i></button>
@@ -70,55 +103,9 @@
 
                   </div>
                 </div>
-                
+               </div> -->
 
-               </div>
-
-            <!-- <table class="table">
-                <thead>
-                    <tr>
-                        <th scope="col">#</th>
-                        <th scope="col">Product Name</th>
-                        <th scope="col">price</th>
-                        <th scope="col">Quantity</th> -->
-                        <!-- <th scope="col">Details</th>
-                        <th scope="col">Update</th>
-                        <th scope="col">Delete</th> -->
-                    <!-- </tr>
-                </thead>
-                <tbody>
-                    <tr *ngFor="let prod of products ; let i=index">
-                        <th scope="row">{{i+1}}</th>
-                        <td>{{prod.productName}}</td>
-                        <td>{{prod.price}}</td>
-                        <td>{{prod.qty}}</td> -->
-                        <!-- <td> <i class="bi text-primary fs-4 bi-info-circle"[routerLink]="['/home/products/details',prod.id]"></i></td>
-                        <td> <i class="bi text-warning fs-4 bi-pencil-square" [routerLink]="['/home/products','edit',prod.id]"></i></td>
-                        <td>
-                          <i type="button" class="bi text-danger fs-4 bi-trash red" data-bs-toggle="modal" data-bs-target="#staticBackdrop" (click)="SendIDForBackEnd(prod.id)">
-                          </i> 
-                        </td> -->
-
-
-
-                        <!-- <td> <i class="bi text-danger fs-4 bi-trash red" (click)="Delete(prod.id)"></i></td>
-                        <td> 
-                            <i class="bi text-danger fs-4 bi-trash red" (click)="openDeleteConfirmationDialog(prod.id)"></i>
-                        </td> -->
-                        <!-- <td>
-                          <i type="button" class="bi text-danger fs-4 bi-trash red" data-bs-toggle="modal" data-bs-target="#staticBackdrop" (click)="SendIDForBackEnd(prod.id)">
-                          </i> 
-                        </td> -->
-                        <!-- <td>
-                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" (click)="openDeleteConfirmationDialog(prod.id)">
-                              Modal Delete
-                            </button>
-                        </td> -->
-                    <!-- </tr>
-                </tbody>
-            </table>
-          </div>
-  </div> -->
+            
 
   </div>
 
@@ -158,69 +145,6 @@
 
 
 
-<!-- <div class="container">
-  <div class="alert alert-info">
-    <button type="button" data-dismiss="alert" aria-hidden="true" class="close">×</button>
-    <div class="icon hidden-xs">
-      <i class="fa fa-info-circle"></i>
-    </div>
-    <strong>Info</strong>
-    <Br /> Here's a small titbit of information for you.
-  </div>
-  <div class="alert alert-warning">
-    <button type="button" data-dismiss="alert" aria-hidden="true" class="close">×</button>
-    <div class="icon hidden-xs">
-      <i class="fa fa-exclamation-circle"></i>
-    </div>
-    <strong>Warning</strong>
-    <Br /> Hey! Be careful of what you're doing over there!
-  </div>
-
-  <div class="alert alert-danger">
-    <button type="button" data-dismiss="alert" aria-hidden="true" class="close">×</button>
-    <div class="icon hidden-xs">
-      <i class="fa fa-ban"></i>
-    </div>
-    <strong>Danger</strong>
-    <Br /> Oh dear. You just broke the internet.
-  </div>
-</div><div class="container">
-  <div class="alert alert-info">
-    <button type="button" data-dismiss="alert" aria-hidden="true" class="close">×</button>
-    <div class="icon hidden-xs">
-      <i class="fa fa-info-circle"></i>
-    </div>
-    <strong>Info</strong>
-    <Br /> Here's a small titbit of information for you.
-  </div>
-  <div class="alert alert-warning">
-    <button type="button" data-dismiss="alert" aria-hidden="true" class="close">×</button>
-    <div class="icon hidden-xs">
-      <i class="fa fa-exclamation-circle"></i>
-    </div>
-    <strong>Warning</strong>
-    <Br /> Hey! Be careful of what you're doing over there!
-  </div>
-  <div class="alert alert-success">
-    <button type="button" data-dismiss="alert" aria-hidden="true" class="close">×</button>
-    <div class="icon hidden-xs">
-      <i class="fa fa-check"></i>
-    </div>
-    <strong>Success</strong>
-    <Br /> Wow! Great job! Whatever you were doing works!
-  </div>
-  <div class="alert alert-danger">
-    <button type="button" data-dismiss="alert" aria-hidden="true" class="close">×</button>
-    <div class="icon hidden-xs">
-      <i class="fa fa-ban"></i>
-    </div>
-    <strong>Danger</strong>
-    <Br /> Oh dear. You just broke the internet.
-  </div>
-</div> -->
-
-
-
 
 <!-- <div class="alert alert-success">
   <button type="button" data-dismiss="alert" aria-hidden="true" class="close">×</button>
@@ -235,6 +159,10 @@
 <!-- <div class="notification-container">
  
 </div> -->
+
+
+<!-- <button class="wishlist-button" (click)="showWishlist()">Show Wishlist</button> -->
+
 <div class="notification-container">
   <div *ngFor="let notification of notifications" class="notification" [ngClass]="{'hidden': notification.hidden, 'success-notification': notification.type === 'success', 'warning-notification': notification.type === 'warning', 'danger-notification': notification.type === 'danger'}">
     <div class="innernoti">
@@ -259,31 +187,35 @@
 <div *ngIf="showNotification" class="wishlist-notification">
   <div class="innernoti">
     <div class="notification-header">
-      <span class="notification-title">Wishlist Items</span>
+      <span class="notification-title2">Wishlist Items</span>
       <button class="close-btn" (click)="hideWishlist()">&times;</button>
     </div>
     <div class="wishlist-content">
       <ul class="wishlist-items">
         <li class="dropdown-menu-header">
           <div class="dropdown-header d-flex">
-            <h4 class="notification-title mb-0 mr-auto">My Cart</h4>
-            <div class="badge badge-pill badge-light-primary">{{ wishlistItems.length }} Items</div>
+            <h4 class="notification-title2 mb-0 mr-auto">My Cart</h4>
+            <div class="badge badge-pill badge-light-primary total_items_Class">{{ wishlistItems.length }} Items</div>
           </div>
         </li>
-        <div class="shopping-cart">
+        <div class="shopping-cart" [appDisplayDiveFromWishList]="shouldHideDiv">
           <h2>My Cart ({{ wishlistItems.length }} Items)</h2>
           <ul style="list-style: none;">
             <li *ngFor="let item of wishlistItems; let i = index">
-              <div class=" container cart-item">
+              <!-- displayDiveFromWishList={{WishListproductIndecies[i]}} -->
+              <div class=" container cart-item" >
                 <!-- imageName -->
                 
                 <img [src]="'https://localhost:7269/resources/' + item.imageName"  alt="{{ item.productName }}">
-                <div class="row item-details">
+                <!-- [appDisplayDiveFromWishList]="shouldHideDiv" -->
+                <div class="row item-details" >
                   <h3 class="col-7">{{ item.productName }}</h3>
                   <!-- <span class="col-2">ID ::::::: {{ item.productId }}</span> -->
                   <span  class="col-4 quantity justify-content-center" >
                     <button (click)="changeValue(WishListproductIndecies[i], -1, item.productId)">-</button>
                     <span>{{ WishListproductCounts[i] }}</span>
+                    <!-- <span>The Index Of Item in Produts Componenet  is ::::  " {{WishListproductIndecies[i]}} "</span> -->
+                    
                     <button (click)="changeValue(WishListproductIndecies[i], 1, item.productId)">+</button>
                     <span class="price col-1">${{ item.price }}</span>
                   </span>
@@ -318,7 +250,7 @@
         </div>
       </ul>
       <div class="wishlist-footer">
-        <span>Total Items: {{ wishlistItems.length }}</span>
+        <span class="total_items_Class2">Total Items: {{ wishlistItems.length }}</span>
       </div>
     </div>
   </div>

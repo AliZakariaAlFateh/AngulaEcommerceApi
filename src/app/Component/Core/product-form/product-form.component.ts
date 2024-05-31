@@ -58,8 +58,8 @@ export class ProductFormComponent implements OnInit{
     this.ProductsForm = this.fb.group({
       id: [0],
       productName: ['', [Validators.required, Validators.minLength(7)]],
-      price: [0, [Validators.required, Validators.min(100), Validators.max(10000)]],
-      qty: [0, [Validators.required, Validators.max(100)]],
+      price: [0, [Validators.required, Validators.min(100), Validators.max(1000000)]],
+      qty: [0, [Validators.required, Validators.max(10000), Validators.min(1)]],
       categoryid: [0, [Validators.required, Validators.min(1)]],
       imageName:[''] ,
       imagefile: [null] // Add image field to the form
